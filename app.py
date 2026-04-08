@@ -8,7 +8,7 @@ app = Flask(__name__)
 # -----------------------------
 # CONFIGURATION
 # -----------------------------
-BOT_ID = "0fde4fedbc3580a8f1b1d6c52f"
+BOT_ID = "2516ab5f7a761dd9f782547782"
 
 GOALS = {
     "simple_preaching": 5000,

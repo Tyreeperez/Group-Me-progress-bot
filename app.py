@@ -110,6 +110,3 @@ def webhook():
             data["bible_study"] += nums[2]
             data["fruit"] += nums[3]
             data["ga_signatures"] += nums[4]
-
-            save_data(data)
-            send_message("Updated!\n\n" + format_totals(data))

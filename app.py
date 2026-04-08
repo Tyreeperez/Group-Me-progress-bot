@@ -19,7 +19,6 @@ GOALS = {
 }
 
 DATA_FILE = "data.json"
-
 # -----------------------------
 # LOAD OR INITIALIZE DATA
 # -----------------------------
@@ -65,8 +64,7 @@ def send_message(text):
     url = "https://api.groupme.com/v3/bots/post"
     payload = {"bot_id": BOT_ID, "text": text}
     requests.post(url, json=payload)
-
-# -----------------------------
+    # -----------------------------
 # FORMAT TOTALS
 # -----------------------------
 def format_totals(data):
@@ -110,3 +108,46 @@ def webhook():
             data["bible_study"] += nums[2]
             data["fruit"] += nums[3]
             data["ga_signatures"] += nums[4]
+
+            save_data(data)
+            send_message("Updated!\n\n" + format_totals(data))
+                # SUBTRACT
+    elif message.startswith("subtract"):
+        parts = message.split()
+        if len(parts) == 6:
+            nums = list(map(int, parts[1:]))
+
+            data["simple_preaching"] -= nums[0]
+            data["meaningful_preaching"] -= nums[1]
+            data["bible_study"] -= nums[2]
+            data["fruit"] -= nums[3]
+            data["ga_signatures"] -= nums[4]
+
+            save_data(data)
+            send_message("Updated!\n\n" + format_totals(data))
+
+    # TOTAL
+    elif message == "total":
+        send_message(format_totals(data))
+
+    # RESET
+    elif message == "reset":
+        data = {
+            "simple_preaching": 0,
+            "meaningful_preaching": 0,
+            "bible_study": 0,
+            "fruit": 0,
+            "ga_signatures": 0,
+            "month": datetime.datetime.now().month
+        }
+        save_data(data)
+        send_message("All categories reset for this month.\n\n" + format_totals(data))
+
+    return "OK", 200
+
+
+# -----------------------------
+# RUN FLASK (for local testing)
+# -----------------------------
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
